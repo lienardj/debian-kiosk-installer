@@ -39,10 +39,13 @@ id -u kiosk &>/dev/null || useradd -m kiosk -g kiosk -s /bin/bash
 # rights
 chown -R kiosk:kiosk /home/kiosk
 
-# remove virtual consoles, neutralise DPMS
-cat > /etc/X11/xorg.conf./10-monitor.conf << EOF
+# remove virtual consoles, neutralise DPMS, better not to add in xorg.conf
+
+# tips : execute xrandr --listactivemonitors to see which display is active : the name is at the end of the answer (something like DP-1/DP-4/HDMI-1). Replace DP-1 with your correct reference. Maybe not working through SSH.
+
+cat > /etc/X11/xorg.conf.d/10-monitor.conf << EOF
 Section "Monitor"
-    Identifier "DP-1"
+    Identifier "DP-1" 
     Option "DPMS" "false"
 EndSection
 
