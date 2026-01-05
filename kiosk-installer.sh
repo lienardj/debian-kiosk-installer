@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Don't know why pon my fresh install /usr/sbin is not on the path. Yeah, that's dirty.
+export PATH=/usr/sbin:$PATH
+
 # be new
 apt-get update
 
@@ -13,6 +16,17 @@ apt-get install \
     locales \
     -y
 
+# clean what unnecessary
+apt-get install \
+    vim \
+    system-config-printer \
+    xterm \
+    obconf \
+    -y
+
+# clean depedencies
+apt-get autopurge 
+
 # dir
 mkdir -p /home/kiosk/.config/openbox
 
@@ -25,12 +39,18 @@ id -u kiosk &>/dev/null || useradd -m kiosk -g kiosk -s /bin/bash
 # rights
 chown -R kiosk:kiosk /home/kiosk
 
-# remove virtual consoles
-if [ -e "/etc/X11/xorg.conf" ]; then
-  mv /etc/X11/xorg.conf /etc/X11/xorg.conf.backup
-fi
-cat > /etc/X11/xorg.conf << EOF
+# remove virtual consoles, neutralise DPMS
+cat > /etc/X11/xorg.conf./10-monitor.conf << EOF
+Section "Monitor"
+    Identifier "DP-1"
+    Option "DPMS" "false"
+EndSection
+
 Section "ServerFlags"
+    Option "StandbyTime" "0"
+    Option "SuspendTime" "0"
+    Option "OffTime" "0"
+    Option "BlankTime" "0"
     Option "DontVTSwitch" "true"
 EndSection
 EOF
@@ -53,8 +73,6 @@ fi
 cat > /home/kiosk/.config/openbox/autostart << EOF
 #!/bin/bash
 
-KIOSK_URL="https://neave.tv/"
-
 unclutter -idle 0.1 -grab -root &
 
 while :
@@ -72,7 +90,7 @@ do
     --disable-save-password-bubble \
     --disable-session-crashed-bubble \
     --incognito \
-    --kiosk $KIOSK_URL
+    --kiosk http://<zoneminder_IP>/zm/?view=montage#
   sleep 5
 done &
 EOF
