@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Don't know why pon my fresh install /usr/sbin is not on the path. Yeah, that's dirty.
+# Don't know why on my fresh install /usr/sbin is not on the path. Yeah, that's dirty.
 export PATH=/usr/sbin:$PATH
 
 # be new
@@ -14,10 +14,11 @@ apt-get install \
     openbox \
     lightdm \
     locales \
+    nmtui \
     -y
 
 # clean what unnecessary
-apt-get install \
+apt-get purge \
     vim \
     system-config-printer \
     xterm \
@@ -39,7 +40,7 @@ id -u kiosk &>/dev/null || useradd -m kiosk -g kiosk -s /bin/bash
 # rights
 chown -R kiosk:kiosk /home/kiosk
 
-# remove virtual consoles, neutralise DPMS, better not to add in xorg.conf
+# remove virtual consoles, neutralise DPMS, better not to add directly in xorg.conf
 
 # tips : execute xrandr --listactivemonitors to see which display is active : the name is at the end of the answer (something like DP-1/DP-4/HDMI-1). Replace DP-1 with your correct reference. Maybe not working through SSH.
 
