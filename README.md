@@ -9,6 +9,7 @@ Small installer script to setup a minimal Xorg kiosk with Chromium for Debian ba
   ```shell
   wget https://raw.githubusercontent.com/lienardj/debian-kiosk-installer/master/kiosk-installer.sh; chmod +x kiosk-installer.sh; ./kiosk-installer.sh
   ```
+* Configure the network htrough CLI with "nmtui"
 
 ## What will it do?
 It will create a normal user `kiosk`, install software (check the script) and setup configs (it will backup existing) so that on reboot the kiosk user will login automaticaly and run chromium in kiosk mode with one url. It will also hide the mouse. 
